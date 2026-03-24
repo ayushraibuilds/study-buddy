@@ -1,0 +1,389 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1rem 0;font-family:var(--font-sans);}
+.tabs{display:flex;gap:4px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.25rem;}
+.tab{font-size:12px;font-weight:500;padding:7px 14px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;}
+.tab.on{color:#534AB7;border-bottom-color:#534AB7;}
+.pane{display:none;}
+.pane.on{display:block;}
+.lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary);margin-bottom:8px;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem;margin-bottom:10px;}
+.card-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:5px;}
+.card-body{font-size:13px;color:var(--color-text-secondary);line-height:1.6;}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px;margin-bottom:1rem;}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:1rem;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px;}
+.ml{font-size:10px;color:var(--color-text-secondary);margin-bottom:3px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.tag{font-size:11px;font-weight:500;padding:3px 9px;border-radius:var(--border-radius-md);display:inline-block;margin:2px 2px 2px 0;}
+.tg{background:#EAF3DE;color:#3B6D11;}
+.tp{background:#EEEDFE;color:#534AB7;}
+.ta{background:#FAEEDA;color:#854F0B;}
+.tt{background:#E1F5EE;color:#0F6E56;}
+.tb{background:#E6F1FB;color:#0C447C;}
+.tr{background:#FCEBEB;color:#A32D2D;}
+.ts{background:var(--color-background-secondary);color:var(--color-text-secondary);}
+.stack-row{display:flex;flex-direction:column;gap:7px;margin-bottom:1rem;}
+.stack-item{display:flex;gap:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 12px;}
+.s-layer{font-size:11px;font-weight:500;color:var(--color-text-secondary);min-width:80px;padding-top:1px;white-space:nowrap;}
+.s-body{font-size:13px;color:var(--color-text-primary);line-height:1.5;}
+.s-note{font-size:11px;color:var(--color-text-secondary);margin-top:2px;}
+.callout{border-radius:var(--border-radius-md);padding:10px 13px;margin-bottom:1rem;}
+.callout p{font-size:13px;line-height:1.6;}
+.steps{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;}
+.step{display:flex;gap:10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;}
+.sw{font-size:11px;font-weight:500;color:var(--color-text-secondary);min-width:52px;padding-top:1px;white-space:nowrap;}
+.st{font-size:13px;color:var(--color-text-primary);line-height:1.5;}
+.customer-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:9px;}
+.cust-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.cust-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;}
+.cust-name{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.cust-type{font-size:11px;color:var(--color-text-secondary);}
+.cust-body{font-size:13px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:6px;}
+.cust-how{font-size:12px;color:var(--color-text-primary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:7px 10px;line-height:1.5;}
+.tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:9px;margin-bottom:1rem;}
+.tier-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem;}
+.tier-card.featured{border:2px solid #534AB7;}
+.tier-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;display:inline-block;margin-bottom:6px;}
+.tier-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.tier-price{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;}
+.tier-price span{font-size:11px;font-weight:400;color:var(--color-text-secondary);}
+.feat{font-size:12px;color:var(--color-text-secondary);padding:3px 0;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.4;}
+.feat:last-child{border-bottom:none;}
+.feat.yes{color:var(--color-text-primary);}
+.rev-row{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.rev-item{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;}
+.rev-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.rev-name{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.rev-val{font-size:13px;font-weight:500;color:#3B6D11;}
+.rev-body{font-size:12px;color:var(--color-text-secondary);line-height:1.5;}
+.askbtn{width:100%;margin-top:.5rem;}
+.moat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:1rem;}
+.moat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;}
+.moat-label{font-size:10px;color:var(--color-text-secondary);margin-bottom:4px;}
+.moat-val{font-size:12px;color:var(--color-text-primary);line-height:1.5;}
+.code-block{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:10px;font-family:var(--font-mono);font-size:11px;color:var(--color-text-primary);line-height:1.7;}
+</style>
+
+<div class="wrap">
+<div class="tabs">
+  <div class="tab on" onclick="sw('product')">Product</div>
+  <div class="tab" onclick="sw('tech')">Tech stack</div>
+  <div class="tab" onclick="sw('money')">Monetization</div>
+  <div class="tab" onclick="sw('customers')">First 10 customers</div>
+</div>
+
+<!-- PRODUCT TAB -->
+<div id="p-product" class="pane on">
+  <div class="lbl">What it is — one paragraph</div>
+  <div class="callout" style="background:#EEEDFE;">
+    <p style="color:#26215C;">Upload any PDF, paste notes, or share a YouTube link — the app generates Anki-style flashcards, MCQ quizzes, and a concept summary in under 30 seconds. Built for Indian students cramming for JEE, NEET, UPSC, CA exams, and certifications. Works in Hindi and English. Exports to Anki .apkg so students keep their existing workflow.</p>
+  </div>
+
+  <div class="lbl">The core insight</div>
+  <div class="card">
+    <div class="card-title">Creating flashcards is the bottleneck — not studying them</div>
+    <div class="card-body">Every student knows Anki works. But making good flashcards from a 200-page textbook takes 6–8 hours. That's the real barrier. This app collapses that 8 hours to 30 seconds. You're not selling a study tool — you're selling back time to people who are already desperate for it.</div>
+  </div>
+
+  <div class="lbl">Core features — MVP</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">PDF / text upload</div>
+      <div class="card-body">Upload a chapter PDF or paste notes. Claude extracts key concepts, facts, and definitions. Handles scanned PDFs via OCR (Tesseract). Output: 20–50 flashcards per chapter automatically.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Anki .apkg export</div>
+      <div class="card-body">One-click export to the Anki format that 30 million students worldwide already use. No lock-in — this is a feature, not a bug. Students trust the app because it plays nice with their existing tools.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">MCQ quiz generator</div>
+      <div class="card-body">Same source material → generates 10-question MCQ quizzes in the format of actual JEE/NEET/UPSC past papers. Includes distractor options that are plausible, not random. This is the upgrade from Anki alone.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Concept map summary</div>
+      <div class="card-body">One-page visual summary of the chapter: main concepts, relationships, key formulas. Generated as a text outline + exportable as PDF. Perfect for last-minute revision.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Hindi + English mode</div>
+      <div class="card-body">User chooses output language. Flashcards and MCQs generated in their preferred language regardless of source language. Huge differentiator — no other Anki tool does vernacular output.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Exam-specific profiles</div>
+      <div class="card-body">Select your exam: JEE, NEET, UPSC, CA Foundation, GATE, SSC CGL. The AI adjusts card format and quiz style to match that exam's actual question patterns. Cards for NEET look different from cards for UPSC.</div>
+    </div>
+  </div>
+
+  <div class="lbl">Moat over time</div>
+  <div class="moat-row">
+    <div class="moat-card"><div class="moat-label">Month 1</div><div class="moat-val">First working Hindi flashcard generator. Speed of execution is the moat.</div></div>
+    <div class="moat-card"><div class="moat-label">Month 3</div><div class="moat-val">Curated deck library — 500 pre-made decks for top Indian exams. Network effect starts.</div></div>
+    <div class="moat-card"><div class="moat-label">Month 6</div><div class="moat-val">Performance data — you know which cards your users get wrong most. Proprietary weak-topic intelligence.</div></div>
+    <div class="moat-card"><div class="moat-label">Month 12</div><div class="moat-val">Coaching institute partnerships — your deck library becomes their default study tool. B2B revenue unlocks.</div></div>
+  </div>
+
+  <button class="askbtn" onclick="sendPrompt('Show me a wireframe mockup of the Study Buddy upload screen and the generated flashcard output')">Show me the UI mockup ↗</button>
+</div>
+
+<!-- TECH STACK TAB -->
+<div id="p-tech" class="pane">
+  <div class="lbl">Stack philosophy — solo dev, ship in 1 week</div>
+  <div class="callout" style="background:#EAF3DE;">
+    <p style="color:#27500A;">Everything is a managed service. No custom infrastructure until you have 1,000 paying users. The entire stack can be built and deployed by one person in under a week using free tiers. Total cost at launch: under Rs. 1,500/month.</p>
+  </div>
+
+  <div class="lbl">Full stack breakdown</div>
+  <div class="stack-row">
+    <div class="stack-item">
+      <div class="s-layer">Frontend</div>
+      <div><div class="s-body">Next.js 14 + Tailwind CSS. Deployed on Vercel free tier. File drag-and-drop with react-dropzone. Card preview UI built in plain React — no heavy component library needed.</div><div class="s-note">Cost: Rs. 0. Vercel free tier handles 100GB bandwidth/month.</div></div>
+    </div>
+    <div class="stack-item">
+      <div class="s-layer">Auth + DB</div>
+      <div><div class="s-body">Supabase — Google OAuth in 10 minutes, Postgres for user data, file metadata, generated card sets. Row-level security ensures users only see their own cards.</div><div class="s-note">Cost: Rs. 0 up to 500 MAU, then Rs. 2,000/mo Pro.</div></div>
+    </div>
+    <div class="stack-item">
+      <div class="s-layer">File storage</div>
+      <div><div class="s-body">Supabase Storage for PDF uploads. Max file size: 10MB on free tier (enough for most chapters). Files deleted after 24 hours to stay within storage limits — users download their cards, not re-access files.</div><div class="s-note">Cost: included in Supabase free tier (1GB storage).</div></div>
+    </div>
+    <div class="stack-item">
+      <div class="s-layer">PDF parsing</div>
+      <div><div class="s-body">PyMuPDF (fitz) for text extraction from PDFs — fast, free, handles most textbooks. For scanned/image PDFs, fall back to Tesseract OCR. Run as a Python serverless function on Vercel or as a Railway microservice.</div><div class="s-note">Cost: Rs. 0 (open source). Railway hobby plan Rs. 600/mo if needed.</div></div>
+    </div>
+    <div class="stack-item">
+      <div class="s-layer">AI generation</div>
+      <div><div class="s-body">Claude API (claude-sonnet-4-5 for quality, haiku for speed on short inputs). Single prompt generates flashcards + MCQs + concept summary in one API call. Structured JSON output makes parsing trivial.</div>
+      <div class="s-note">Cost: ~Rs. 0.80 per 10-page chapter processed. At 500 chapters/day = Rs. 400/day = Rs. 12,000/mo — gates naturally behind paywall.</div></div>
+    </div>
+    <div class="stack-item">
+      <div class="s-layer">Anki export</div>
+      <div><div class="s-body">genanki Python library generates valid .apkg files from the Claude output. Runs server-side. The export is a static file served directly to the user's browser — no streaming needed.</div><div class="s-note">Cost: Rs. 0 (open source). This is the killer feature that no web-only competitor offers.</div></div>
+    </div>
+    <div class="stack-item">
+      <div class="s-layer">Payments</div>
+      <div><div class="s-body">Razorpay for Indian UPI + card support. Dodo Payments or LemonSqueezy for international students (NRI market). Subscription handled server-side via webhooks to Supabase — update user tier on payment event.</div><div class="s-note">Cost: 2% per transaction. No monthly fee.</div></div>
+    </div>
+    <div class="stack-item">
+      <div class="s-layer">YouTube input</div>
+      <div><div class="s-body">Phase 2 feature: accept a YouTube URL, fetch transcript via youtube-transcript-api (Python, free), pipe to Claude for card generation. Massive for students who learn from YouTube lectures. Adds zero infrastructure cost.</div><div class="s-note">Cost: Rs. 0. youtube-transcript-api works without API key for most videos.</div></div>
+    </div>
+  </div>
+
+  <div class="lbl">The core Claude prompt — what makes it work</div>
+  <div class="code-block">System: You are an expert educator creating study materials for Indian competitive exam students.
+Output ONLY valid JSON. No preamble, no markdown.
+
+User: Exam: {exam_type} | Language: {language} | Content: {extracted_text}
+
+Generate:
+{
+  "flashcards": [
+    {"front": "Question or concept", "back": "Answer or explanation", "tags": ["topic"]}
+  ],
+  "mcqs": [
+    {"question": "...", "options": ["A","B","C","D"], "correct": "A", "explanation": "..."}
+  ],
+  "summary": "3-paragraph concept summary",
+  "key_formulas": ["formula 1", "formula 2"],
+  "weak_topics": ["topics likely to confuse this student"]
+}</div>
+
+  <div class="lbl">Total infra cost by stage</div>
+  <div class="grid3">
+    <div class="met"><div class="ml">Launch (0–100 users)</div><div class="mv">~Rs. 600/mo</div></div>
+    <div class="met"><div class="ml">Traction (100–500)</div><div class="mv">~Rs. 3,000/mo</div></div>
+    <div class="met"><div class="ml">Growth (500–2,000)</div><div class="mv">~Rs. 12,000/mo</div></div>
+    <div class="met"><div class="ml">Build time to MVP</div><div class="mv">5–7 days</div></div>
+  </div>
+</div>
+
+<!-- MONETIZATION TAB -->
+<div id="p-money" class="pane">
+  <div class="lbl">Subscription tiers</div>
+  <div class="tier-grid">
+    <div class="tier-card">
+      <div class="tier-name">Free</div>
+      <div class="tier-price">Rs. 0 <span>/forever</span></div>
+      <div class="feat yes">3 chapter uploads/mo</div>
+      <div class="feat yes">Up to 30 cards per upload</div>
+      <div class="feat yes">Anki .apkg export</div>
+      <div class="feat yes">English output only</div>
+      <div class="feat">MCQ quiz generator</div>
+      <div class="feat">Hindi output</div>
+      <div class="feat">Concept maps</div>
+      <div class="feat">Exam-specific profiles</div>
+      <div class="feat">Saved deck library</div>
+    </div>
+    <div class="tier-card featured">
+      <div class="tier-badge" style="background:#EEEDFE;color:#534AB7;">Most popular</div>
+      <div class="tier-name">Student Pro</div>
+      <div class="tier-price">Rs. 149 <span>/mo</span></div>
+      <div class="feat yes">Unlimited uploads</div>
+      <div class="feat yes">Up to 100 cards per upload</div>
+      <div class="feat yes">Anki + PDF export</div>
+      <div class="feat yes">Hindi + English output</div>
+      <div class="feat yes">MCQ quiz generator</div>
+      <div class="feat yes">Exam-specific profiles (JEE, NEET, UPSC, CA)</div>
+      <div class="feat yes">Saved deck library (unlimited)</div>
+      <div class="feat">Concept maps</div>
+      <div class="feat">Shared decks</div>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name">Scholar</div>
+      <div class="tier-price">Rs. 349 <span>/mo</span></div>
+      <div class="feat yes">Everything in Pro</div>
+      <div class="feat yes">Concept maps + visual summaries</div>
+      <div class="feat yes">YouTube URL input</div>
+      <div class="feat yes">Shared public deck library</div>
+      <div class="feat yes">Spaced repetition scheduler</div>
+      <div class="feat yes">Weak topic detection</div>
+      <div class="feat yes">Study group sharing</div>
+      <div class="feat yes">Priority processing</div>
+    </div>
+  </div>
+
+  <div class="lbl">Revenue streams beyond subscriptions</div>
+  <div class="rev-row">
+    <div class="rev-item">
+      <div class="rev-head"><div class="rev-name">Coaching institute licensing</div><div class="rev-val">Rs. 10,000–30,000/mo</div></div>
+      <div class="rev-body">Allen, Aakash, FIITJEE-style institutes have 100–5,000 students per batch. They pay for a white-label version where students get cards auto-generated from the institute's study material. One deal = Rs. 15,000/mo. 5 deals = Rs. 75,000 MRR from B2B alone. This is a Month 3–4 play.</div>
+    </div>
+    <div class="rev-item">
+      <div class="rev-head"><div class="rev-name">Pre-made deck marketplace</div><div class="rev-val">Rs. 99–499 one-time</div></div>
+      <div class="rev-body">Curate and sell exam-specific deck packs: "Complete NEET Biology 2025 — 2,400 cards", "UPSC GS Paper 1 — 1,800 cards". Students buy once. You earn passively. Top creators who share decks earn 30% revenue share — community-built supply.</div>
+    </div>
+    <div class="rev-item">
+      <div class="rev-head"><div class="rev-name">Study material affiliate</div><div class="rev-val">Rs. 50–200 per referral</div></div>
+      <div class="rev-body">Partner with PW (Physics Wallah), Unacademy, BYJU's for cross-referral. When a student uploads a chapter and asks "where can I learn more about this topic?", you surface relevant courses. Earn referral commission per enrollment.</div>
+    </div>
+    <div class="rev-item">
+      <div class="rev-head"><div class="rev-name">API access for edtech builders</div><div class="rev-val">Rs. 2,999–9,999/mo</div></div>
+      <div class="rev-body">Other edtech apps want the same card-generation feature. Expose it as a simple REST API — they call it with text, you return cards. 10 API customers at Rs. 3,000/mo = Rs. 30,000 passive MRR with near-zero marginal cost.</div>
+    </div>
+  </div>
+
+  <div class="lbl">Revenue milestones</div>
+  <div class="grid3">
+    <div class="met"><div class="ml">Break-even users (Pro)</div><div class="mv">~25 subscribers</div></div>
+    <div class="met"><div class="ml">Rs. 50k MRR target</div><div class="mv">Month 2–3</div></div>
+    <div class="met"><div class="ml">Rs. 1L MRR target</div><div class="mv">Month 4–5</div></div>
+    <div class="met"><div class="ml">Highest margin stream</div><div class="mv">Institute B2B</div></div>
+  </div>
+</div>
+
+<!-- FIRST 10 CUSTOMERS TAB -->
+<div id="p-customers" class="pane">
+  <div class="lbl">The 10 customers and exactly how to get them</div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">1</div>
+      <div><div class="cust-name">The JEE/NEET aspirant in your network</div><div class="cust-type">Direct — friend / friend's sibling</div></div>
+    </div>
+    <div class="cust-body">You almost certainly know someone preparing for JEE or NEET. They have 500-page textbooks and 8 hours of available study time. Give them free access, sit with them for 30 minutes, watch them use it. This is your user research session and your first testimonial.</div>
+    <div class="cust-how">How: WhatsApp message to 5 people you know: "I built a tool that turns your NCERT chapters into Anki flashcards in 30 seconds. Want free access for your JEE prep? Takes 5 min to try."</div>
+  </div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">2</div>
+      <div><div class="cust-name">r/JEEAdv and r/NEET moderators or top posters</div><div class="cust-type">Reddit — warm approach</div></div>
+    </div>
+    <div class="cust-body">The top posters on r/JEEAdv (350k members) and r/NEET (200k members) have credibility with exactly your audience. DM 5–10 of them with a free lifetime account. One positive post from a well-known Reddit user in these communities = 200+ signups.</div>
+    <div class="cust-how">How: Find posts asking "how do I make Anki cards faster?" — there are dozens. Reply with your tool. Then DM the OP with a free Pro code. Don't spam, be genuinely helpful.</div>
+  </div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">3</div>
+      <div><div class="cust-name">UPSC Telegram group members</div><div class="cust-type">Telegram — targeted post</div></div>
+    </div>
+    <div class="cust-body">UPSC Telegram groups have 50,000–5,00,000 members who are desperate for better revision tools. UPSC notes are dense — turning them into cards is exactly the pain this solves. These users have high motivation and are used to paying for study tools.</div>
+    <div class="cust-how">How: Post in 5–10 UPSC groups: "Made a free tool that converts your UPSC notes PDF into flashcards + MCQs in 30 seconds. Hindi output supported. Link in bio / [link]. Free for first 100 users." Post between 8–10 PM when engagement is highest.</div>
+  </div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">4</div>
+      <div><div class="cust-name">CA exam aspirants on CA Study Instagram</div><div class="cust-type">Instagram — niche creator</div></div>
+    </div>
+    <div class="cust-body">CA Foundation, Inter, and Final have notoriously dense study material. "CA Study" pages on Instagram have 50k–500k followers of exactly this audience. One creator demo = 500+ highly qualified leads who are already paying for study tools.</div>
+    <div class="cust-how">How: DM 5 CA study creators on Instagram. Offer to generate a free deck from any CA Foundation chapter they choose — show the output in their own content. They demo, you get their audience. Give them affiliate link for 20% commission.</div>
+  </div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">5</div>
+      <div><div class="cust-name">Physics Wallah student Facebook groups</div><div class="cust-type">Facebook — PW community</div></div>
+    </div>
+    <div class="cust-body">Physics Wallah has 10 million+ YouTube subscribers and massive Facebook study groups. These students are price-sensitive but convert well when shown a tool that solves a real daily problem. Rs. 149/mo is less than a single printed test series.</div>
+    <div class="cust-how">How: Join 3–5 PW student Facebook groups. Post a short video: "I uploaded Chapter 5 Thermodynamics and got 42 Anki cards in 28 seconds." Show the screen recording. The visual proof converts better than any copy.</div>
+  </div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">6</div>
+      <div><div class="cust-name">Med student / MBBS Discord servers</div><div class="cust-type">Discord — high-value niche</div></div>
+    </div>
+    <div class="cust-body">MBBS students are the power users of Anki globally. They use it more intensively than any other student group. They will immediately understand the value, give detailed feedback, and refer classmates. High willingness to pay for tools that work.</div>
+    <div class="cust-how">How: Search for "MBBS India", "Premed India", "NEET PG" Discord servers. Join, be active for a week, then share your tool authentically. Offer to process their Gray's Anatomy chapter as a live demo in the server.</div>
+  </div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">7</div>
+      <div><div class="cust-name">Study-with-me YouTube creator (small/mid tier)</div><div class="cust-type">Creator collab — 10k–100k channel</div></div>
+    </div>
+    <div class="cust-body">Small "study with me" creators (10k–100k subs) are more responsive than big names and have more engaged, niche audiences. They create content daily and need tools to recommend. A 2-minute demo segment in one of their videos reaches exactly your target user.</div>
+    <div class="cust-how">How: Find 10 Indian study YouTubers in the 10k–100k range. Email them: "Hi [name], I'm a solo dev who built a free Anki card generator for Indian exams. I'd love to give you 3 months free Pro and set you up with an affiliate link. Your audience is exactly who needs this." Expect 2–3 to say yes.</div>
+  </div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">8</div>
+      <div><div class="cust-name">Anki subreddit (r/Anki — 200k members globally)</div><div class="cust-type">Reddit — global + Indian diaspora</div></div>
+    </div>
+    <div class="cust-body">r/Anki users are already sold on flashcard learning — you're not convincing them of anything. They just want better card creation tools. An honest "I built this" post here converts extremely well. You'll also reach NRI students abroad who use Anki for medical/law school.</div>
+    <div class="cust-how">How: Post: "Show r/Anki: I built a free tool that generates Anki decks from PDFs with exam-specific formatting for Indian exams (JEE, NEET, UPSC). Hindi language support too." Include a GIF of the workflow. This community loves tool builders.</div>
+  </div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">9</div>
+      <div><div class="cust-name">Local coaching institute near you</div><div class="cust-type">In-person — B2B seed</div></div>
+    </div>
+    <div class="cust-body">Walk into a small local coaching institute and offer free access for their students for 2 months. They become your case study. "100 students from [institute name] used it to prepare for NEET — average 40% faster revision time." That testimonial is worth more than any ad spend.</div>
+    <div class="cust-how">How: Identify 2–3 coaching institutes near you. Meet the owner/director. Demo live. Ask for 1 batch of 20–30 students as a free pilot. After 4 weeks, ask for a testimonial video. Use this to close the next 5 institutes at Rs. 10,000/mo each.</div>
+  </div>
+
+  <div class="customer-card">
+    <div class="cust-head">
+      <div class="cust-num" style="background:#EEEDFE;color:#534AB7;">10</div>
+      <div><div class="cust-name">Twitter/X "built in public" post</div><div class="cust-type">Organic — founder story</div></div>
+    </div>
+    <div class="cust-body">The Indian indie hacker / edtech Twitter community is small but highly engaged. A genuine "I built this in a week, here's how it works, here's what I learned" thread will get retweeted by the right people and bring in 50–200 signups from people who follow ed-tech builds closely.</div>
+    <div class="cust-how">How: Thread structure: (1) the problem you saw (2) what you built (3) GIF of it working (4) the surprising thing you learned building it (5) free link for first 100 users. Tag 2–3 edtech founders you respect. Post on a Tuesday or Wednesday morning.</div>
+  </div>
+
+  <div class="lbl">Timeline to first 10 customers</div>
+  <div class="steps">
+    <div class="step"><div class="sw">Day 1–2</div><div class="st">WhatsApp 5 people in your network who are studying for exams. Customers 1–2 come from here within 24 hours.</div></div>
+    <div class="step"><div class="sw">Day 3–4</div><div class="st">Post in 5 UPSC and JEE Telegram groups. Customers 3–5 come from Telegram within 48 hours of a well-timed post.</div></div>
+    <div class="step"><div class="sw">Day 5–6</div><div class="st">DM 10 CA/NEET creators on Instagram with a free demo offer. Customers 6–7 come from the 1–2 who say yes.</div></div>
+    <div class="step"><div class="sw">Day 7</div><div class="st">Post on r/JEEAdv and r/Anki. Customers 8–10 come from Reddit within the same day. Reddit traffic peaks within 6 hours of posting.</div></div>
+  </div>
+
+  <button class="askbtn" onclick="sendPrompt('Write me the exact Reddit post and Telegram message I should send to get the first 100 users for Study Buddy')">Write the exact launch messages ↗</button>
+</div>
+</div>
+
+<script>
+function sw(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  const ids=['product','tech','money','customers'];
+  document.querySelectorAll('.tab')[ids.indexOf(id)].classList.add('on');
+  document.getElementById('p-'+id).classList.add('on');
+}
+</script>

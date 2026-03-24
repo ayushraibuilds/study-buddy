@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--sb-shell);
+  --color-foreground: var(--sb-ink);
+  --font-sans: var(--font-study-body);
+  --font-mono: var(--font-study-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--sb-shell);
+  color: var(--sb-ink);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top center, rgba(255, 255, 255, 0.72), transparent 28%),
+    linear-gradient(180deg, rgba(83, 74, 183, 0.03), transparent 40%),
+    var(--sb-shell);
+  color: var(--sb-ink);
+  font-family: var(--font-study-body), sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(83, 74, 183, 0.18);
+}
+
+.study-shell {
+  background-image:
+    linear-gradient(rgba(83, 74, 183, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(83, 74, 183, 0.04) 1px, transparent 1px);
+  background-position: center;
+  background-size: 44px 44px;
+}

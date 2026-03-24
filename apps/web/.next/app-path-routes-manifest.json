@@ -1,0 +1,10 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/decks/[deckId]/route": "/api/decks/[deckId]",
+  "/api/decks/route": "/api/decks",
+  "/api/export/anki/route": "/api/export/anki",
+  "/api/generate/route": "/api/generate",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/"
+}

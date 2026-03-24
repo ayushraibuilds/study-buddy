@@ -1,0 +1,15 @@
+[project]
+name = "study-engine"
+version = "0.1.0"
+description = "Study Buddy sidecar for PDF extraction and Anki packaging."
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.118.0",
+  "uvicorn>=0.37.0",
+  "python-multipart>=0.0.20",
+  "pymupdf>=1.26.4",
+  "genanki>=0.13.1",
+]
+
+[tool.uv]
+package = false
