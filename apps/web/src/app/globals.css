@@ -1,47 +1,20 @@
-@import "tailwindcss";
-
-@theme inline {
-  --color-background: var(--sb-shell);
-  --color-foreground: var(--sb-ink);
-  --font-sans: var(--font-study-body);
-  --font-mono: var(--font-study-mono);
+/* Add basic 3D perspective styles for the flashcard flip */
+.perspective-1000 {
+  perspective: 1000px;
 }
 
-* {
-  box-sizing: border-box;
+.transform-style-3d {
+  transform-style: preserve-3d;
 }
 
-html {
-  background: var(--sb-shell);
-  color: var(--sb-ink);
-  scroll-behavior: smooth;
+.backface-hidden {
+  backface-visibility: hidden;
 }
 
-body {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top center, rgba(255, 255, 255, 0.72), transparent 28%),
-    linear-gradient(180deg, rgba(83, 74, 183, 0.03), transparent 40%),
-    var(--sb-shell);
-  color: var(--sb-ink);
-  font-family: var(--font-study-body), sans-serif;
+.rotate-y-180 {
+  transform: rotateY(180deg);
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-::selection {
-  background: rgba(83, 74, 183, 0.18);
-}
-
-.study-shell {
-  background-image:
-    linear-gradient(rgba(83, 74, 183, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(83, 74, 183, 0.04) 1px, transparent 1px);
-  background-position: center;
-  background-size: 44px 44px;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

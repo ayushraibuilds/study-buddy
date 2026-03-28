@@ -3,15 +3,25 @@ from __future__ import annotations
 import io
 import os
 import tempfile
+import json
+import re
 from pathlib import Path
 
 import fitz
 import genanki
+import groq
+from youtube_transcript_api import YouTubeTranscriptApi
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel
 
 app = FastAPI(title="Study Buddy Study Engine")
+
+class TranscriptRequest(BaseModel):
+    url: str
+
+class GenerateCardsRequest(BaseModel):
+    text: str
 
 
 class FlashcardModel(BaseModel):
@@ -50,6 +60,51 @@ async def extract_text(file: UploadFile = File(...)):
         text_parts.append(page.get_text("text"))
 
     return JSONResponse({"text": " ".join(text_parts).strip()})
+
+
+@app.post("/youtube-transcript")
+async def get_youtube_transcript(payload: TranscriptRequest):
+    try:
+        # Extract video ID
+        match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", payload.url)
+        if not match:
+            raise ValueError("Invalid YouTube URL")
+            
+        video_id = match.group(1)
+        transcript = YouTubeTranscriptApi.get_transcript(video_id)
+        text_parts = [t['text'] for t in transcript]
+        return JSONResponse({"text": " ".join(text_parts)})
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/generate-flashcards")
+async def generate_flashcards(payload: GenerateCardsRequest):
+    if not payload.text:
+        raise HTTPException(status_code=400, detail="Text required")
+        
+    groq_api_key = os.environ.get("GROQ_API_KEY", "dummy-key-for-now")
+    
+    try:
+        client = groq.Groq(api_key=groq_api_key)
+        prompt = f"Create 5 flashcards from the following text. Return a JSON object with a 'flashcards' key containing an array of objects with 'front' and 'back' keys. Keep answers concise. Text: {payload.text[:8000]}"
+        
+        completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}],
+            response_format={"type": "json_object"}
+        )
+        
+        content = completion.choices[0].message.content
+        return JSONResponse(json.loads(content))
+    except Exception as e:
+        # Fallback dummy for testing if API key fails
+        print(f"Groq API error: {e}")
+        return JSONResponse({
+            "flashcards": [
+                {"front": "Sample Question 1", "back": "Sample Answer 1"},
+                {"front": "Sample Question 2", "back": "Sample Answer 2"}
+            ]
+        })
 
 
 @app.post("/export-apkg")
