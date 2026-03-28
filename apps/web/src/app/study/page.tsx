@@ -1,29 +1,45 @@
 'use client';
 
-import { useState } from 'react';
-import { BookOpen, Check, X, RotateCcw, Brain, Calendar, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { BookOpen, Check, RotateCcw, Brain, LoaderCircle, ArrowLeft } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { StudyBuddyApiClient } from "@study-buddy/api-client";
+import type { DeckRecord } from "@study-buddy/contracts";
 
-type Flashcard = {
-    id: string;
-    front: string;
-    back: string;
-};
-
-const DUMMY_CARDS: Flashcard[] = [
-    { id: '1', front: 'What is the primary function of the Mitochondria?', back: 'It generates most of the chemical energy needed to power the cell\'s biochemical reactions (powerhouse of the cell).' },
-    { id: '2', front: 'Explain the concept of "Spaced Repetition" in learning.', back: 'An evidence-based learning technique that incorporates increasing intervals of time between subsequent review of previously learned material to exploit the psychological spacing effect.' },
-    { id: '3', front: 'What is the Time Complexity of Binary Search?', back: 'O(log n), where n is the number of elements in the array.' }
-];
+const apiClient = new StudyBuddyApiClient({
+  baseUrl: "",
+  userId: "web-anonymous",
+});
 
 export default function StudySession() {
-    const [cards] = useState<Flashcard[]>(DUMMY_CARDS);
+    const searchParams = useSearchParams();
+    const deckId = searchParams.get('deckId');
+
+    const [deck, setDeck] = useState<DeckRecord | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
     const [sessionComplete, setSessionComplete] = useState(false);
 
+    useEffect(() => {
+        if (!deckId) {
+            return;
+        }
+
+        apiClient.getDeck(deckId)
+            .then(setDeck)
+            .catch(err => setError(err.message))
+            .finally(() => setLoading(false));
+    }, [deckId]);
+
+    const cards = deck?.studyPack?.flashcards || [];
+
     const handleFlip = () => setIsFlipped(!isFlipped);
 
-    const handleResponse = (quality: 'again' | 'hard' | 'good' | 'easy') => {
+    const handleResponse = (_quality: 'again' | 'hard' | 'good' | 'easy') => {
         setIsFlipped(false);
         // Spaced repetition interval calculation would go here (SuperMemo-2 algorithm)
         if (currentIndex < cards.length - 1) {
@@ -42,13 +58,44 @@ export default function StudySession() {
                     </div>
                     <h2 className="text-3xl font-extrabold text-slate-900 mb-2">Session Complete!</h2>
                     <p className="text-slate-600 mb-8">You reviewed {cards.length} cards today. Your memory retention is improving.</p>
-                    <button 
-                        onClick={() => { setCurrentIndex(0); setSessionComplete(false); setIsFlipped(false); }}
-                        className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition"
-                    >
-                        <RotateCcw className="w-5 h-5" /> Start New Session
-                    </button>
+                    <div className="flex gap-3 mt-6">
+                        <button 
+                            onClick={() => { setCurrentIndex(0); setSessionComplete(false); setIsFlipped(false); }}
+                            className="flex-1 py-4 bg-slate-100 text-slate-800 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition"
+                        >
+                            <RotateCcw className="w-5 h-5" /> Restart
+                        </button>
+                        <Link href="/library" className="flex-1 py-4 bg-indigo-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 transition">
+                            Back to Library
+                        </Link>
+                    </div>
                 </div>
+            </div>
+        );
+    }
+
+    if (!deckId) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+                <div className="text-red-500 bg-red-50 p-6 rounded-2xl max-w-md w-full">No deck ID provided in the URL.</div>
+                <Link href="/library" className="mt-6 px-6 py-3 bg-slate-200 rounded-full font-semibold hover:bg-slate-300">Return to Library</Link>
+            </div>
+        );
+    }
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <LoaderCircle className="w-10 h-10 animate-spin text-indigo-500" />
+            </div>
+        );
+    }
+
+    if (error || !deck || cards.length === 0) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+                <div className="text-red-500 bg-red-50 p-6 rounded-2xl max-w-md w-full">{error || "No flashcards found in this deck."}</div>
+                <Link href="/library" className="mt-6 px-6 py-3 bg-slate-200 rounded-full font-semibold hover:bg-slate-300">Return to Library</Link>
             </div>
         );
     }
@@ -58,8 +105,11 @@ export default function StudySession() {
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
             <header className="px-6 py-4 flex items-center justify-between border-b border-slate-200 bg-white">
-                <div className="flex items-center gap-2 text-indigo-700 font-bold text-lg tracking-tight">
-                    <Brain className="w-6 h-6" /> StudyBuddy 
+                <div className="flex items-center gap-6">
+                    <Link href="/library" className="text-slate-400 hover:text-slate-800 transition bg-slate-50 p-2 rounded-full"><ArrowLeft className="w-5 h-5" /></Link>
+                    <div className="flex items-center gap-2 text-indigo-700 font-bold text-lg tracking-tight">
+                        <Brain className="w-6 h-6" /> {deck.title}
+                    </div>
                 </div>
                 <div className="flex items-center gap-4 text-sm font-medium text-slate-500">
                     <div className="flex items-center gap-1.5"><BookOpen className="w-4 h-4"/> 12 Due Today</div>
@@ -72,11 +122,13 @@ export default function StudySession() {
                 
                 {/* Progress bar */}
                 <div className="w-full max-w-2xl mb-8 flex justify-center">
-                    <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                    <div className="w-full bg-slate-200/50 h-2 rounded-full overflow-hidden shadow-inner ring-1 ring-black/5 relative hover:scale-[1.01] transition-transform">
                         <div 
-                            className="bg-indigo-600 h-full rounded-full transition-all duration-300 ease-out" 
+                            className="bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 h-full rounded-full transition-all duration-700 ease-in-out relative group overflow-hidden shadow-[0_0_15px_rgba(99,102,241,0.5)]" 
                             style={{ width: `${((currentIndex) / cards.length) * 100}%` }}
-                        />
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+                        </div>
                     </div>
                 </div>
 
